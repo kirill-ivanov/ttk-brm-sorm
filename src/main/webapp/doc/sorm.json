@@ -1,0 +1,295 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "RESTFull API BRMSorm",
+    "version": "0.01",
+    "title": "BRMSorm",
+    "termsOfService": "http://unibill.transtk.ru/brm",
+    "contact": {
+      "email": "K.Ivanov@ttk.ru"
+    }
+  },
+  "host": "unibill.transtk.ru",
+  "basePath": "/brm-sorm/rest/api/v1.0/sorm",
+  "tags": [
+    {
+      "name": "BRM KTTK СОРМ",
+      "description": "Сервисы"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Авторизация",
+        "description": "Авторизация для получения доступа к функциям",
+        "operationId": "auth",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "formData",
+            "description": "Логин пользователя",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "Пароль пользователя",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Не заданы обязательные параметры"
+          },
+          "401": {
+            "description": "Пользователь с таким логин/паролем не найден"
+          }
+        }
+      }
+    },
+    "/getInformationByPhoneFiz": {
+      "get": {
+        "tags": [
+          "information"
+        ],
+        "summary": "Информация по физ. лицу",
+        "description": "Получить информацию по физическому лицу по заданному номеру телефона",
+        "operationId": "getInformationByPhoneFiz",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "header",
+            "description": "Авторизационная сессия",
+            "required": true,
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "description": "Номер телефона. Формат 74991234567 (11 цифр)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ОК"
+          },
+          "400": {
+            "description": "Телефон не задан"
+          },
+          "401": {
+            "description": "Ошибка авторизации. Сессия неверна"
+          }
+        }
+      }
+    },
+    "/getInformationByPhoneYur": {
+      "get": {
+        "tags": [
+          "information"
+        ],
+        "summary": "Информация по юр. лицу",
+        "description": "Получить информацию по юридическому лицу по заданному номеру телефона",
+        "operationId": "getInformationByPhoneYur",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "header",
+            "description": "Авторизационная сессия",
+            "required": true,
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "description": "Номер телефона. Формат 74991234567 (11 цифр)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ОК"
+          },
+          "400": {
+            "description": "Телефон не задан"
+          },
+          "401": {
+            "description": "Ошибка авторизации. Сессия неверна"
+          }
+        }
+      }
+    },
+    "/getDetail": {
+      "get": {
+        "tags": [
+          "detail"
+        ],
+        "summary": "Детализация звонков",
+        "description": "Получить позвонковую детализацию. Период не должен превышать 3 месяца",
+        "operationId": "getDetail",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "header",
+            "description": "Авторизационная сессия",
+            "required": true,
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "description": "Номер телефона. Формат 74991234567 (11 цифр)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "description": "Дата начала периода. Формат ДД/ММ/ГГГГ",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "description": "Дата конца периода. Формат ДД/ММ/ГГГГ. Подставляется конец дня (23:59:59)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ОК"
+          },
+          "400": {
+            "description": "Телефон не задан"
+          },
+          "401": {
+            "description": "Ошибка авторизации. Сессия неверна"
+          }
+        }
+      }
+    },
+    "/getStatPayment": {
+      "get": {
+        "tags": [
+          "payment"
+        ],
+        "summary": "Статистика платежей",
+        "description": "Получить инфмацию по платежам, которые совершал клиент",
+        "operationId": "getStatPayment",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "header",
+            "description": "Авторизационная сессия",
+            "required": true,
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "description": "Номер телефона. Формат 74991234567 (11 цифр)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "account_no",
+            "in": "query",
+            "description": "Номер лицевого счета в биллинге BRM KTTK",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "inn",
+            "in": "query",
+            "description": "ИНН юр. лица",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "kpp",
+            "in": "query",
+            "description": "КПП юр. лица",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "description": "Дата начала периода. Формат ДД/ММ/ГГГГ",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "description": "Дата конца периода. Формат ДД/ММ/ГГГГ. Подставляется конец дня (23:59:59)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ОК"
+          },
+          "400": {
+            "description": "Телефон не задан"
+          },
+          "401": {
+            "description": "Ошибка авторизации. Сессия неверна"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+  }
+}

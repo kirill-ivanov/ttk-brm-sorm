@@ -1,0 +1,38 @@
+group 'brm.ttk.ru'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+dependencies {
+    compile(
+            [group: 'org.projectlombok', name: 'lombok', version: '1.16.16'],
+            [group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'],
+            [group: 'com.sun.jersey', name: 'jersey-client', version: '1.19.3'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.7'],
+            [group: 'org.json', name: 'json', version: '20160810'],
+            [group: 'commons-codec', name: 'commons-codec', version: '1.2'],
+            [group: 'com.sun.jersey', name: 'jersey-servlet', version: '1.19.3'],
+            [group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1']
+    )
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+war {
+    exclude('**/context.xml')
+    manifest {
+        attributes('Application-Title': "BRM-Sorm",
+                'Java-Version': sourceCompatibility,
+                'BRMSorm-Version': version,
+                'Build-Date': new Date().format("yyyy.MM.dd HH:mm:ss")
+        )
+    }
+}

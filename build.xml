@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<project name="brm" basedir="." default="all">
+    <property name="brm.build" value="${basedir}/build"/>
+    <property name="brm.dist" value="${basedir}/dist"/>
+    <property name="brm.src" value="${basedir}/src"/>
+    <property name="brm.web" value="${basedir}/src/main/webapp"/>
+    <property name="brm.lib" value="${basedir}/lib"/>
+
+    <target name="init">
+        <filelist id="compile-classpath" dir="${brm.lib}">
+            <file name="commons-codec-1.9.jar"/>
+            <file name="servlet-api.jar"/>
+            <file name="jersey-client-1.19.3.jar"/>
+            <file name="jersey-core-1.19.3.jar"/>
+            <file name="jersey-server-1.19.3.jar"/>
+            <file name="jersey-servlet-1.19.3.jar"/>
+            <file name="json-20170516.jar"/>
+            <file name="javax.ws.rs-api-2.0-m02.jar"/>
+        </filelist>
+    </target>
+
+    <target name="compile" depends="init">
+        <mkdir dir="${brm.build}/classes"/>
+        <javac destdir="${brm.build}/classes"
+               debug="on"
+               optimize="on"
+               target="1.8"
+               encoding="Cp1251"
+               srcdir="${brm.src}">
+            <classpath>
+                <filelist refid="compile-classpath">
+                </filelist>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="build" depends="compile">
+        <mkdir dir="${brm.dist}"/>
+        <mkdir dir="${brm.build}/war"/>
+        <copy todir="${brm.build}/war/WEB-INF/classes" overwrite="yes">
+            <fileset dir="${brm.build}/classes">
+                <exclude name="**/auth/**"/>
+                <exclude name="**/connect/**"/>
+                <exclude name="**/Obj.class/**"/>
+            </fileset>
+        </copy>
+        <copy todir="${brm.build}/war/WEB-INF/lib" overwrite="yes">
+            <fileset dir="${brm.lib}">
+                <include name="jersey-client-1.19.jar"/>
+                <include name="jersey-servlet-1.19.4.jar"/>
+                <include name="javax.ws.rs-api-2.0-m02.jar"/>
+                <include name="jersey-server-1.19.4.jar"/>
+                <include name="jersey-core-1.19.4.jar"/>
+                <!--<exclude name="check_security.jar"/>
+                <exclude name="commons-beanutils-1.8.0.jar"/>
+                <exclude name="commons-codec-1.9.jar"/>
+                <exclude name="commons-collections-3.2.1.jar"/>
+                <exclude name="commons-fileupload-1.2.2.jar"/>
+                <exclude name="commons-io-2.4.jar"/>
+                <exclude name="commons-javaflow.jar"/>
+                <exclude name="commons-digester-2.1.jar"/>
+                <exclude name="commons-logging-1.1.3.jar"/>
+                <exclude name="groovy-all-2.0.1.jar"/>
+                <exclude name="dom4j-1.6.1.jar"/>
+                <exclude name="junit-4.12.jar"/>
+                <exclude name="iText-2.1.7.jar"/>
+                <exclude name="jasperreports-5.6.0.jar"/>
+                <exclude name="jasperreports-fonts-5.6.0.jar"/>
+                <exclude name="jasperreports-javaflow-5.6.0.jar"/>
+                <exclude name="json-org-1.0.jar"/>
+                <exclude name="jxl.jar"/>
+                <exclude name="ojdbc7.jar"/>
+                <exclude name="servlet-api.jar"/>
+                <exclude name="jdom-2.0.2.jar"/>
+                <exclude name="poi-3.13-20150929.jar"/>
+                <exclude name="poi-ooxml-3.13-20150929.jar"/>
+                <exclude name="poi-ooxml-schemas-3.13-20150929.jar"/>
+                <exclude name="poi-scratchpad-3.13-20150929.jar"/>
+                <exclude name="xmlbeans-2.6.0.jar"/>
+                <exclude name="stax-api-1.0.1.jar"/>
+                <exclude name="mail.jar"/>
+                <exclude name="ttk_util.jar"/>
+                <exclude name="jsoup-1.8.2.jar"/>
+                <exclude name="rt.jar"/>
+                <exclude name="minreport_core_lib.jar"/>
+                <exclude name="c3p0-0.9.1.1.jar"/>
+                <exclude name="log4j-1.2.17.jar"/>
+                <exclude name="quartz-2.2.2.jar"/>
+                <exclude name="quartz-jobs-2.2.2.jar"/>
+                <exclude name="slf4j-api-1.7.7.jar"/>
+                <exclude name="slf4j-log4j12-1.7.7.jar"/>
+                <exclude name="sqljdbc42.jar"/>
+                <exclude name="jtds-1.3.1.jar"/>-->
+            </fileset>
+        </copy>
+        <copy todir="${brm.build}/war" overwrite="yes">
+            <fileset dir="${brm.web}"/>
+        </copy>
+        <war destfile="${brm.dist}/brm-sorm.war" webxml="${brm.web}/WEB-INF/web.xml">
+            <fileset dir="${brm.build}/war">
+            </fileset>
+        </war>
+    </target>
+
+    <target name="clean">
+        <delete dir="${brm.build}"/>
+        <delete dir="${brm.dist}"/>
+    </target>
+
+    <target name="all" depends="clean, build"/>
+</project>
